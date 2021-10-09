@@ -30,9 +30,9 @@ $ yarn run start
 1. Setup project, basic typescript.
 2. MVP for reading form Ethereum blockchain
    1. Try connecting to the blockchain and read blocks/transactions
-   2. Based on datastructures and relationsships define which database will be used
+   2. Based on data structures and relation ships define which database will be used
    3. Setup a ethereum service as an abstraction for reading.
 3. MVP for Smart Contract
    1. Develop & publish smart contract
-4. Connect service to Smart Contrac
+4. Connect service to Smart Contract
 5. Look for edge cases when reading from Ethereum blockchain
