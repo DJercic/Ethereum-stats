@@ -18,6 +18,10 @@ $ npm install --global yarn
 ### Start the service
 
 ```bash
+$ yarn install
+```
+
+```bash
 $ yarn run start
 ```
 
