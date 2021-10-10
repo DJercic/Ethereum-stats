@@ -46,6 +46,7 @@
     "@bitauth/libauth": "^1.17.1",
     "@types/node": "^16.10.3",
     "dotenv": "^10.0.0",
+    "pg": "^8.7.1",
     "typeorm": "^0.2.38",
     "web3": "^1.6.0",
     "winston": "^3.3.3"
