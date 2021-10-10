@@ -8,17 +8,14 @@ const { promisify } = require('util');
 
 const writeFileAsync = promisify(fs.writeFile);
 
-let i = 0;
-
-const condition = (_block: any) => {
-  i += 1;
-  return i > 10;
-};
+const SUNDAY_OCT_10 = 1633824000;
 
 async function run() {
-  for await (const block of fetchUntil(condition)) {
+  const blocks = fetchUntil((block) => block.timestamp <= SUNDAY_OCT_10);
+
+  for await (const block of blocks) {
     log.info(`Fetched block ${block.number}`);
-    await writeFileAsync(`${block.number}.json`, JSON.stringify(block));
+    await writeFileAsync(`blocks/${block.number}.json`, JSON.stringify(block));
   }
 }
 
