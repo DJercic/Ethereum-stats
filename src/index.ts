@@ -1,21 +1,20 @@
-import log from './services/logging.service';
+import fs from 'fs/promises';
+
+import * as dbService from './services/db.service';
 import { fetchUntil } from './services/ethereum.service';
+import log from './services/logging.service';
 
 log.info('Starting ethereum stats service');
-
-const fs = require('fs');
-const { promisify } = require('util');
-
-const writeFileAsync = promisify(fs.writeFile);
 
 const SUNDAY_OCT_10 = 1633824000;
 
 async function run() {
+  await dbService.setup();
   const blocks = fetchUntil((block) => block.timestamp <= SUNDAY_OCT_10);
 
   for await (const block of blocks) {
     log.info(`Fetched block ${block.number}`);
-    await writeFileAsync(`blocks/${block.number}.json`, JSON.stringify(block));
+    await fs.writeFile(`blocks/${block.number}.json`, JSON.stringify(block));
   }
 }
 
