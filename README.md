@@ -27,12 +27,26 @@ $ yarn run start
 
 ## The Plan
 
-1. Setup project, basic typescript.
-2. MVP for reading form Ethereum blockchain
-   1. Try connecting to the blockchain and read blocks/transactions
-   2. Based on data structures and relation ships define which database will be used
-   3. Setup a ethereum service as an abstraction for reading.
+1. Setup project, basic typescript. +
+2. MVP for reading form Ethereum blockchain +
+   1. Try connecting to the blockchain and read blocks/transactions +
+   2. Based on data structures and relation ships define which database will be used +
+   3. Setup a ethereum service as an abstraction for reading. +
 3. MVP for Smart Contract
    1. Develop & publish smart contract
 4. Connect service to Smart Contract
 5. Look for edge cases when reading from Ethereum blockchain
+
+### ToDo's
+
+Define what small level tasks I want to accomplish
+[] Setup postgres as docker service
+[] Setup typeorm and connect to postgres
+[] Setup testing
+[] Setup integration testing
+[] Setup Block model
+[] Create a query to extract and sum all gas fees for that day.
+[] Write to Smart Contract to save Gas Spend on a given day
+[] Catch errors while reading/writing from ethereum blockchain
+[] Add retry logic to ethereum.service.fetchBlock()...
+[] Setup github actions to automatically run tests
