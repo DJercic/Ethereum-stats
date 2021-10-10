@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ethereum-stats
+      POSTGRES_USER: ethereum-stats
+      POSTGRES_DB: ethereum_stats
+    ports:
+      - 5435:5432
