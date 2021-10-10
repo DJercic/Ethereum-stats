@@ -17,10 +17,13 @@
     "globby",
     "libauth",
     "mkdir",
+    "postgres",
+    "postgresql",
     "prettierignore",
     "sandboxed",
     "transpiled",
     "typedoc",
+    "typeorm",
     "untracked"
   ],
   "flagWords": [],
