@@ -3,7 +3,7 @@ import path from 'path';
 
 import dotenv from 'dotenv';
 
-const _memoize = {};
+const memoize: { config?: Record<string, string> } = {};
 
 export type ConfigOptions = {
   // Path to env file
@@ -15,8 +15,8 @@ export type ConfigOptions = {
 };
 
 export function autoload(options: ConfigOptions) {
-  if (!!_memoize['config'] && !options.override) {
-    return _memoize['config'];
+  if (!!memoize['config'] && !options.override) {
+    return memoize.config;
   }
 
   const envFile = options.path || process.env.ENV_FILE;
@@ -28,18 +28,20 @@ export function autoload(options: ConfigOptions) {
     );
   }
 
-  const config = loadFromFile(envFile) ? !!envFile : { ...process.env };
-
-  _memoize['config'] = config;
-  return config;
+  if (!!envFile) {
+    memoize.config = loadFromFile(envFile);
+  } else {
+    memoize.config = loadFromObject(options.static);
+  }
+  return memoize.config;
 }
 
 export function clear() {
   /**
    * Clear current configuration from the memoization object
    */
-  if (_memoize['config']) {
-    delete _memoize['config'];
+  if (memoize.config) {
+    delete memoize.config;
   }
 }
 
@@ -62,9 +64,11 @@ export function read(
    * Read env variable. If variable is not set return default value.
    *
    */
-  const config = _memoize['config'] ? 'config' in _memoize : process.env;
-  const envVar = config[name];
-  return envVar ? envVar : defaultValue;
+  const config = memoize.config ? memoize.config : process.env;
+  if (name in config) {
+    return config[name];
+  }
+  return defaultValue;
 }
 
 function loadFromFile(envFile: string): Record<string, string> {
@@ -73,4 +77,16 @@ function loadFromFile(envFile: string): Record<string, string> {
     ...process.env,
     ...dotenv.parse(fs.readFileSync(envPath)),
   };
+}
+
+function loadFromObject(
+  config: Record<string, string> | undefined
+): Record<string, string> {
+  if (!!config) {
+    return {
+      ...process.env,
+      ...config,
+    };
+  }
+  return { ...process.env };
 }
