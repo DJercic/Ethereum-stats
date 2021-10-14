@@ -4,9 +4,9 @@ import { Entity, PrimaryColumn, Column } from 'typeorm';
 export class BlockEntity {
   @PrimaryColumn()
   number: number;
-  @Column()
+  @Column({ name: 'gas_limit' })
   gasLimit: number;
-  @Column()
+  @Column({ name: 'gas_used' })
   gasUsed: number;
   @Column()
   miner: string;
