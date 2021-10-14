@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 
+import { autoload } from './config';
 import * as dbService from './services/db.service';
 import { fetchUntil } from './services/ethereum.service';
 import log from './services/logging.service';
-import { autoload } from './config';
 
 log.info('Starting ethereum stats service');
 

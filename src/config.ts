@@ -41,7 +41,7 @@ export function clear() {
   /**
    * Clear current configuration from the memoization object
    */
-  if (!!memoize.config) {
+  if (memoize.config) {
     delete memoize.config;
   }
 }
