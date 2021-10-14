@@ -1,8 +1,8 @@
+import { once } from 'ramda';
 import Web3 from 'web3';
 
 import { need } from '../config';
 import { Block } from '../dtos/block';
-import { once } from 'ramda';
 
 export async function fetchBlock(
   blockHashOrBlockNumber: number | string
