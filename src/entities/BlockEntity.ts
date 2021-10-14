@@ -12,5 +12,6 @@ export class BlockEntity {
   miner: string;
   @Column()
   hash: string;
+  @Column()
   timestamp: number;
 }

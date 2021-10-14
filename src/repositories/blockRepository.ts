@@ -9,4 +9,11 @@ export class BlockRepository extends Repository<BlockEntity> {
       .select('Max(block.number)')
       .getOne();
   }
+
+  findAllBetween(start: number, end: number) {
+    return this.createQueryBuilder('block')
+      .where('block.timestamp > :start', { start })
+      .andWhere('block.timestamp < :end', { end })
+      .getMany();
+  }
 }
