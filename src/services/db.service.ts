@@ -2,6 +2,7 @@ import { once } from 'ramda';
 import { Connection, createConnection } from 'typeorm';
 
 import { need, read } from '../config';
+import { BlockEntity } from '../entities/BlockEntity';
 
 async function _setup(): Promise<Connection> {
   const connection = await createConnection({
@@ -12,8 +13,12 @@ async function _setup(): Promise<Connection> {
     username: need('DB_USER'),
     password: need('DB_PASS'),
     database: need('DB_NAME'),
-    entities: ['entities/*.js'],
+    entities: [BlockEntity],
+    migrationsRun: true,
+    migrationsTableName: 'meta_migration',
+    synchronize: true,
   });
+
   return connection;
 }
 
