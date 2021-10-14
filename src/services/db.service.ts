@@ -1,8 +1,9 @@
 import { Connection, createConnection } from 'typeorm';
+import { once } from 'ramda';
 
 import { need, read } from '../config';
 
-export async function setup(): Promise<Connection> {
+async function _setup(): Promise<Connection> {
   const connection = await createConnection({
     name: read('DB_CONNECTION_NAME', 'default'),
     type: 'postgres',
@@ -14,3 +15,5 @@ export async function setup(): Promise<Connection> {
   });
   return connection;
 }
+
+export const setup = once(_setup);
