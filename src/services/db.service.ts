@@ -1,5 +1,5 @@
 import { once } from 'ramda';
-import { Connection, createConnection } from 'typeorm';
+import { Connection, createConnection, getConnection } from 'typeorm';
 
 import { need, read } from '../config';
 import { BlockEntity } from '../entities/BlockEntity';
@@ -20,6 +20,18 @@ async function _setup(): Promise<Connection> {
   });
 
   return connection;
+}
+
+export async function truncateAllEntities() {
+  /**
+   * Truncate all registered entities .
+   */
+  const entities = getConnection().entityMetadatas;
+
+  for (const entity of entities) {
+    const repository = getConnection().getRepository(entity.name);
+    await repository.clear();
+  }
 }
 
 export const setup = once(_setup);
