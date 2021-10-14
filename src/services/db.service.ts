@@ -1,5 +1,5 @@
-import { Connection, createConnection } from 'typeorm';
 import { once } from 'ramda';
+import { Connection, createConnection } from 'typeorm';
 
 import { need, read } from '../config';
 
@@ -12,6 +12,7 @@ async function _setup(): Promise<Connection> {
     username: need('DB_USER'),
     password: need('DB_PASS'),
     database: need('DB_NAME'),
+    entities: ['entities/*.js'],
   });
   return connection;
 }
