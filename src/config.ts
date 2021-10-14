@@ -14,7 +14,8 @@ export type ConfigOptions = {
   readonly static?: Record<string, string>;
 };
 
-export function autoload(options: ConfigOptions) {
+export function autoload(configOptions?: ConfigOptions) {
+  const options = configOptions || {};
   if (!!memoize['config'] && !options.override) {
     return memoize.config;
   }
