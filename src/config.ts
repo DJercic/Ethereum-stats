@@ -16,7 +16,7 @@ export type ConfigOptions = {
 
 export function autoload(configOptions?: ConfigOptions) {
   const options = configOptions || {};
-  if (!!memoize['config'] && !options.override) {
+  if (!!memoize.config && !options.override) {
     return memoize.config;
   }
 
@@ -29,7 +29,7 @@ export function autoload(configOptions?: ConfigOptions) {
     );
   }
 
-  if (!!envFile) {
+  if (envFile) {
     memoize.config = loadFromFile(envFile);
   } else {
     memoize.config = loadFromObject(options.static);
@@ -41,7 +41,7 @@ export function clear() {
   /**
    * Clear current configuration from the memoization object
    */
-  if (memoize.config) {
+  if (!!memoize.config) {
     delete memoize.config;
   }
 }
@@ -83,7 +83,7 @@ function loadFromFile(envFile: string): Record<string, string> {
 function loadFromObject(
   config: Record<string, string> | undefined
 ): Record<string, string> {
-  if (!!config) {
+  if (config) {
     return {
       ...process.env,
       ...config,
