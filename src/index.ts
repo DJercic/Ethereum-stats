@@ -1,23 +1,32 @@
-import fs from 'fs/promises';
-
 import { autoload } from './config';
 import * as dbService from './services/db.service';
 import { fetchUntil } from './services/ethereum.service';
 import log from './services/logging.service';
+import { getCustomRepository } from 'typeorm';
+import { BlockRepository } from './repositories/BlockRepository';
 
 log.info('Starting ethereum stats service');
 
-const SUNDAY_OCT_10 = 1633824000;
+async function syncUntilLastDatabaseEntry() {
+  const blockRepo = getCustomRepository(BlockRepository);
 
-async function run() {
-  autoload();
-  await dbService.setup();
-  const blocks = fetchUntil((block) => block.timestamp <= SUNDAY_OCT_10);
+  const latestBlock = await blockRepo.findLatest();
+  const iterateBlocks = fetchUntil(
+    (block) => block.timestamp <= latestBlock.timestamp
+  );
 
-  for await (const block of blocks) {
+  for await (const block of iterateBlocks) {
     log.info(`Fetched block ${block.number}`);
-    await fs.writeFile(`blocks/${block.number}.json`, JSON.stringify(block));
+    await blockRepo.save(block);
+    log.info(`Saved block ${block.number}`);
   }
 }
 
-run();
+async function main() {
+  autoload();
+  await dbService.setup();
+
+  await syncUntilLastDatabaseEntry();
+}
+
+main();
