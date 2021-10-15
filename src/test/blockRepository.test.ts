@@ -26,11 +26,18 @@ async function loadSeedBlocks(): Promise<Array<Record<any, any>>> {
     .map((line) => JSON.parse(line));
 }
 
-async function insertSeedBlocks() {
+async function insertSeedBlocks(): Promise<number> {
   const blocks = await loadSeedBlocks();
   const blockRepo = getCustomRepository(BlockRepository);
-
-  return await blockRepo.insert(blocks);
+  let chunk = [];
+  for (const block of blocks) {
+    chunk.push(block);
+    if (chunk.length >= 500) {
+      await blockRepo.insert(chunk);
+      chunk = [];
+    }
+  }
+  return blocks.length;
 }
 
 async function cleanUp() {
@@ -59,7 +66,7 @@ test('fetching latest block from the database when database is full', async (t) 
 
 test('bulk inserting blocks', async (t) => {
   const inserts = await insertSeedBlocks();
-  t.assert(inserts.identifiers.length == BLOCKS_LENGTH);
+  t.assert(inserts == BLOCKS_LENGTH);
 });
 
 test('finding all blocks between Oct 01-18', async (t) => {
