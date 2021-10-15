@@ -25,4 +25,12 @@ export class BlockEntity {
   @Index()
   @Column()
   timestamp: number;
+
+  @Column({
+    type: 'jsonb',
+    array: false,
+    default: () => "'{}'",
+    nullable: false,
+  })
+  transactions: Array<string>;
 }
