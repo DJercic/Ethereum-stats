@@ -93,7 +93,6 @@ test('finding all blocks for Oct 10', async (t) => {
     OCT_10_LAST_TIMESTAMP
   );
   const blockNumbers = new Set(blocks.map((block) => block.number));
-
   t.assert(blocks.length === 6375);
   t.assert(!blockNumbers.has(FIRST_BLOCK));
   t.assert(!blockNumbers.has(FIRST_BLOCK_ON_OCT_11));
