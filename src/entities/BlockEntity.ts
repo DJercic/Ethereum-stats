@@ -14,8 +14,13 @@ export class BlockEntity {
   @Column()
   miner: string;
 
+  @Index()
   @Column()
   hash: string;
+
+  @Index()
+  @Column({ name: 'parent_hash' })
+  parentHash: string;
 
   @Index()
   @Column()
