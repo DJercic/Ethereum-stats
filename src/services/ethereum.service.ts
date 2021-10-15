@@ -53,7 +53,16 @@ export function subscribe(
 
 function initWeb3(): Web3 {
   const url = need('ETHEREUM_NODE_URL');
-  return new Web3(new Web3.providers.WebsocketProvider(url));
+  return new Web3(
+    new Web3.providers.WebsocketProvider(url, {
+      reconnect: {
+        auto: true,
+        delay: 5000, // ms
+        maxAttempts: 5,
+        onTimeout: false,
+      },
+    })
+  );
 }
 // Function that will ensure that initWeb3 is executed only once
 const web3 = once(initWeb3);
