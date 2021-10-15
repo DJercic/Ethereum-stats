@@ -29,7 +29,7 @@ export class BlockRepository extends Repository<BlockEntity> {
      * Save entity into the database if the entity does not exists.
      * If entity is saved return true, if not, return false.
      */
-    const existingBlock = await this.findOne(block);
+    const existingBlock = await this.findOne({ number: block.number });
     if (existingBlock) {
       return false;
     }
