@@ -15,7 +15,7 @@ async function syncUntilLastDatabaseEntry() {
   for await (const block of iterateBlocks) {
     log.info(`Fetched block ${block.number}`);
     await blockRepo.save(block);
-    log.info(`Saved block ${block.number}`);
+    log.info(`Synced block ${block.number}`);
   }
 }
 
@@ -24,7 +24,7 @@ async function onNewBlock(block) {
   const blockRepo = getCustomRepository(BlockRepository);
   const saved = await blockRepo.upsert(block);
   if (saved) {
-    log.info(`Syncing block ${block.number}`);
+    log.info(`Synced block ${block.number}`);
   } else {
     log.warn(`Block ${block.number} already exists`);
   }
