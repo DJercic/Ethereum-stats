@@ -37,16 +37,16 @@ export async function* fetchUntil(
 }
 
 export function subscribe(
-  onData: (blockHeader: Block) => {},
+  onData: (blockHeader?: Block) => {},
   onError: (err: Error) => {}
 ) {
   web3()
     .eth.subscribe('newBlockHeaders', async (err, blockHeader) => {
-      if (!err) {
-        const block = await fetchBlock(blockHeader.number);
-        return onData(block);
+      if (err) {
+        throw err;
       }
-      throw err;
+      const block = await fetchBlock(blockHeader.number);
+      return onData(block);
     })
     .on('error', onError);
 }
