@@ -12,7 +12,7 @@ async function syncUntilLastDatabaseEntry() {
 
   const latestBlock = await blockRepo.findLatest();
   const iterateBlocks = fetchUntil(
-    (block) => block.timestamp <= latestBlock.timestamp
+    (block) => block.number !== latestBlock.number
   );
 
   for await (const block of iterateBlocks) {

@@ -6,7 +6,14 @@ import { BlockEntity } from '../entities/BlockEntity';
 export class BlockRepository extends Repository<BlockEntity> {
   findLatest() {
     return this.createQueryBuilder('block')
-      .select('Max(block.number)')
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .from(BlockEntity, 'b')
+          .select('max(b.number)')
+          .getQuery();
+        return 'block.number IN ' + subQuery;
+      })
       .getOne();
   }
 
