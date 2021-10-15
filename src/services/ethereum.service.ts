@@ -19,7 +19,9 @@ export async function fetchLatestBlock(): Promise<Block> {
   return block as Block;
 }
 
-export async function* fetchUntil(condition: (block: Block) => boolean) {
+export async function* fetchUntil(
+  condition: (block: Block) => boolean
+): AsyncIterableIterator<Block> {
   /**
    * Fetch until a condition is met.
    * Example:
