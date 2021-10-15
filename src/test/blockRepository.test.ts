@@ -42,8 +42,7 @@ test.beforeEach(async (_t) => {
   config.autoload({ path: '.env.test', override: true });
   await dbService.setup();
 });
-test.afterEach(cleanUp);
-test.after.always(cleanUp);
+test.afterEach.always(cleanUp);
 
 test('fetching latest block from the database when database is empty', async (t) => {
   const blockRepo = getCustomRepository(BlockRepository);
