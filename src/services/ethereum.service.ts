@@ -34,9 +34,24 @@ export async function* fetchUntil(condition: (block: Block) => boolean) {
   }
 }
 
+export function subscribe(
+  onData: (blockHeader: Block) => {},
+  onError: (err: Error) => {}
+) {
+  web3()
+    .eth.subscribe('newBlockHeaders', async (err, blockHeader) => {
+      if (!err) {
+        const block = await fetchBlock(blockHeader.number);
+        return onData(block);
+      }
+      throw err;
+    })
+    .on('error', onError);
+}
+
 function initWeb3(): Web3 {
   const url = need('ETHEREUM_NODE_URL');
-  return new Web3(url);
+  return new Web3(new Web3.providers.WebsocketProvider(url));
 }
 // Function that will ensure that initWeb3 is executed only once
 const web3 = once(initWeb3);
