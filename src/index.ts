@@ -20,6 +20,11 @@ async function syncUntilLastDatabaseEntry() {
 }
 
 async function onNewBlock(block) {
+  if (!block) {
+    // This case popped up while listening to Ethereum blockchain,
+    // although the typings suggest that an empty block is not possible.
+    log.error('Received an empty block');
+  }
   log.info(`New block ${block.number}`);
   const blockRepo = getCustomRepository(BlockRepository);
   const saved = await blockRepo.upsert(block);
