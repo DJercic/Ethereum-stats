@@ -45,10 +45,10 @@ export type Block = {
   /* Integer of the total difficulty of the chain until this block. */
   readonly totalDifficulty: string;
   /* Transaction hashes that were confirmed with the block. */
-  readonly transactions: ReadonlyArray<string>;
+  readonly transactions: string[];
   /* The root of the transaction trie of the block. */
   readonly transactionsRoot: string;
   /* All the other miners that computed the hash but message came in after the block was excepted. 
   Block can have max of 7 uncles. */
-  readonly uncles: ReadonlyArray<string>;
+  readonly uncles: string[];
 };
