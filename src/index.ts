@@ -1,3 +1,4 @@
+import * as cron from 'node-cron';
 import { getCustomRepository } from 'typeorm';
 
 import { autoload } from './config';
@@ -5,6 +6,7 @@ import { BlockRepository } from './repositories/blockRepository';
 import * as dbService from './services/db.service';
 import { fetchUntil, subscribe } from './services/ethereum.service';
 import log from './services/logging.service';
+import * as time from './type/time';
 
 async function syncUntilLastDatabaseEntry() {
   const blockRepo = getCustomRepository(BlockRepository);
@@ -41,8 +43,20 @@ async function onNewBlockError(err: Error) {
   throw err;
 }
 
+async function writeStatsToContract() {
+  const {start, end} = time.previousDayTimestamps();
+  console.log(start, end);
+  const blockRepo = getCustomRepository(BlockRepository);
+  const allBetween = await blockRepo.calculateStatsBetween(
+    1634342400,
+    1634381907
+  );
+  console.log('Bigger');
+  console.log(allBetween);
+}
+
 async function main() {
-  autoload({path: '.env'});
+  autoload({ path: '.env' });
   await dbService.setup();
 
   log.info('Starting ethereum stats service');
@@ -50,6 +64,7 @@ async function main() {
 
   log.info('Syncing until last timestamp');
   await syncUntilLastDatabaseEntry();
+  cron.schedule('* * * * *', writeStatsToContract, { timezone: 'UTC' });
 }
 
 main();
