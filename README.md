@@ -63,6 +63,12 @@ $ yarn install
 $ yarn start
 ```
 
+## Issues
+
+### Smart contract storage
+
+Currently the contract is just appending Stats to a variable. How much "Stats" is possible to save on ethereum blockchain? What's the price?
+
 ## The Plan
 
 1. Setup project, basic typescript. &check;
@@ -83,9 +89,11 @@ Define what small level tasks I want to accomplish
 - [x] Setup typeorm and connect to postgres
 - [x] Setup testing
 - [] Setup integration testing
+- [] check if date is in format in smart contract "YYYY-mm-dd"
 - [x] Setup Block model
 - [] Create a query to extract and sum all gas fees for that day.
 - [] Write to Smart Contract to save Gas Spend on a given day
 - [] Catch errors while reading/writing from ethereum blockchain
 - [] Add retry logic to ethereum.service.fetchBlock()...
 - [] Setup github actions to automatically run tests
+- [] Setup hardhat for contract development
