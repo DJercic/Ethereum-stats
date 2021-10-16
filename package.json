@@ -46,10 +46,14 @@
   "dependencies": {
     "@bitauth/libauth": "^1.17.1",
     "@types/node": "^16.10.3",
+    "@types/node-cron": "^3.0.0",
     "@types/ramda": "^0.27.45",
     "dotenv": "^10.0.0",
+    "moment-timezone": "^0.5.33",
+    "node-cron": "^3.0.0",
     "pg": "^8.7.1",
     "ramda": "^0.27.1",
+    "sinon": "^11.1.2",
     "typeorm": "^0.2.38",
     "web3": "^1.6.0",
     "winston": "^3.3.3"
