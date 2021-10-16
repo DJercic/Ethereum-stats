@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0
-
 pragma solidity >=0.7.0 <0.9.0;
 
 /**
@@ -16,22 +14,28 @@ contract DailyStats {
     }
 
     Stat[] stats;
-
-    modifier onlyOwner()
-    {
-        require(msg.sender != owner);
-        _;
-    }
+    uint256 counter = 0;
 
     constructor() {
         owner = msg.sender;
     }
 
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
     function store(
-        uint256 transactionsCount,
-        uint256 gasFees,
-        string memory timeformat
-    ) public onlyOwner{
-        stats.push(Stat(transactionsCount, gasFees, timeformat));
+        uint256 _transactionsCount,
+        uint256 _gasFees,
+        string memory _date
+    ) public onlyOwner {
+        // check if timeformat is in format "YYYY-mm-dd"
+        stats.push(Stat(_transactionsCount, _gasFees, _date));
+    }
+
+    function latest() public view returns (Stat memory) {
+        require(stats.length == 0, 'No stats yet');
+        return stats[stats.length - 1];
     }
 }
