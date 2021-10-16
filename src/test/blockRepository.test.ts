@@ -107,3 +107,14 @@ test('writing duplicate block number', async (t) => {
   t.assert(await blockRepo.upsert(block));
   t.assert(!(await blockRepo.upsert(block)));
 });
+
+
+test.only('finding all blocks between Oct 10 00:00 - 10 11:59:59 and sum up their gas fees and count them', async (t) => {
+  const OCT_10_FIRST_TIMESTAMP = 1633824000;
+  const OCT_10_LAST_TIMESTAMP = 1633910400;
+  await insertSeedBlocks();
+  const blockRepo = getCustomRepository(BlockRepository);
+  const stats = await blockRepo.calculateStatsBetween(OCT_10_FIRST_TIMESTAMP, OCT_10_LAST_TIMESTAMP);
+  t.assert(stats.sum == 98475597666);
+  t.assert(stats.count == 6375);
+});
