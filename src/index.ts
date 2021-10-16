@@ -1,9 +1,10 @@
+import { getCustomRepository } from 'typeorm';
+
 import { autoload } from './config';
+import { BlockRepository } from './repositories/blockRepository';
 import * as dbService from './services/db.service';
 import { fetchUntil, subscribe } from './services/ethereum.service';
 import log from './services/logging.service';
-import { getCustomRepository } from 'typeorm';
-import { BlockRepository } from './repositories/BlockRepository';
 
 async function syncUntilLastDatabaseEntry() {
   const blockRepo = getCustomRepository(BlockRepository);
@@ -41,7 +42,7 @@ async function onNewBlockError(err: Error) {
 }
 
 async function main() {
-  autoload();
+  autoload({path: '.env'});
   await dbService.setup();
 
   log.info('Starting ethereum stats service');

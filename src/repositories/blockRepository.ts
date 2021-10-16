@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, DeepPartial } from 'typeorm';
+import { DeepPartial, EntityRepository, Repository } from 'typeorm';
 
 import { BlockEntity } from '../entities/BlockEntity';
 
