@@ -11,8 +11,11 @@ Daily statistics for Ethereum blockchain
 $ cp .env .env.default
 ```
 
-Open .env in a text editor and set ETHEREUM_NODE_URL. Use websockets as protocol.  
-**Example of .env file:**
+Open .env in a text editor and set the following variables:
+
+- ETHEREUM_NODE_URL (Use websockets as protocol)
+- ACCOUNT_PRIVATE_KEY
+  **Example of .env file:**
 
 ```
    ETHEREUM_NODE_URL=wss://rinkeby.infura.io/ws/v3/.....
