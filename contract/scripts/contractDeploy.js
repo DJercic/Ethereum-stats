@@ -22,11 +22,17 @@ dotenv.config({
     ACCOUNT_PRIVATE_KEY
   } = process.env;
 
+  function getTransactionOptions() {
+    // to sign a transaction for ropsten special options need to be included.
+    // hence the hack
+    return (ETHEREUM_NODE_URL.includes('ropsten.')) ? {
+      'chain': 'ropsten'
+    } : {}
+  }
+
   async function sendSigned(txData, privateKey) {
     const key = Buffer.from(privateKey.replace('0x', ''), 'hex');
-    const transaction = new Tx(txData, {
-      'chain': 'ropsten'
-    });
+    const transaction = new Tx(txData, getTransactionOptions());
     transaction.sign(key);
     const serializedTx = transaction.serialize().toString('hex');
     return await web3.eth.sendSignedTransaction('0x' + serializedTx);
