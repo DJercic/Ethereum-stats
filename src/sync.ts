@@ -53,7 +53,11 @@ async function onNewBlockError(err: Error) {
   throw err;
 }
 
-async function storeYesterdaysStatsToContract() {
+async function storeYesterdaysStatsToContractHandler() {
+  /**
+   * Invoked when timer raises an event to sync data to the
+   * ethereum blockchain.
+   */
   try {
     const { start, end } = time.previousDayTimestamps();
     const blockRepo = getCustomRepository(BlockRepository);
@@ -81,7 +85,7 @@ export async function run(cronSchedule: string) {
   await syncBlockDatabase();
 
   log.info(`Starting cron schedule ${cronSchedule}`);
-  cron.schedule(cronSchedule, storeYesterdaysStatsToContract, {
+  cron.schedule(cronSchedule, storeYesterdaysStatsToContractHandler, {
     timezone: 'UTC',
   });
 }
