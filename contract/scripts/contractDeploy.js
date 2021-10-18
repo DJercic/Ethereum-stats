@@ -64,8 +64,8 @@ dotenv.config({
     Success deploying contract ${fileName}
     Contract address: ${result.contractAddress}
 
-    add to .env file:
-    $ echo CONTRACT_ADDRESS='${result.contractAddress}'
+    Add to contract address to .env file by running the following command:
+    $ echo CONTRACT_ADDRESS='${result.contractAddress} >> .env'
   `);
 })() // websocket is not letting the process succeed, hence the exit(0)
 .then(() => process.exit(0)).catch(console.error);
