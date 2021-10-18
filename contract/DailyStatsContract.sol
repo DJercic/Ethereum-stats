@@ -5,7 +5,7 @@ pragma solidity >=0.7.0 <0.9.0;
  * @dev Store daily number of transactions and gas fees inside a Contract
  */
 contract DailyStats {
-    address public owner = msg.sender;
+    address public owner;
 
     struct Stat {
         uint256 transactionsCount; // Number of transactions
