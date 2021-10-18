@@ -1,3 +1,5 @@
+import fs from 'fs/promises';
+
 import { once } from 'ramda';
 import Web3 from 'web3';
 
@@ -51,18 +53,52 @@ export function subscribe(
     .on('error', onError);
 }
 
+export async function depositStats(
+  numberOfTransactions: number,
+  sumOfGasFees: number,
+  date: string
+) {
+  /***
+   *
+   */
+  const Contract = web3().eth.Contract;
+  const jsonInterface = await abi();
+  const contract = new Contract(jsonInterface);
+
+  const response = await contract.methods
+    .store(numberOfTransactions, sumOfGasFees, date)
+    .send();
+  console.log(response);
+  return response;
+}
+
 function initWeb3(): Web3 {
   const url = need('ETHEREUM_NODE_URL');
-  return new Web3(
+  const web = new Web3(
     new Web3.providers.WebsocketProvider(url, {
       reconnect: {
         auto: true,
         delay: 5000, // ms
         maxAttempts: 5,
-        onTimeout: false,
+        onTimeout: true,
       },
     })
   );
+
+  const account = web.eth.accounts.privateKeyToAccount(
+    need('ACCOUNT_PRIVATE_KEY')
+  );
+  web.eth.accounts.wallet.add(account);
+  web.eth.defaultAccount = account.address;
+  return web;
 }
+
+async function loadAbi() {
+  const fileName = 'contract_DailyStatsContract_sol_DailyStats';
+  const abi = await fs.readFile(`./contract/artifacts/${fileName}.abi`);
+  return JSON.parse(abi.toString('utf-8'));
+}
+
 // Function that will ensure that initWeb3 is executed only once
 const web3 = once(initWeb3);
+const abi = once(loadAbi);
