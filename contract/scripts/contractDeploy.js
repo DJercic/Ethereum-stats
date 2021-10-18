@@ -42,7 +42,7 @@ dotenv.config({
   const web3 = new Web3(ETHEREUM_NODE_URL);
   const account = web3.eth.accounts.privateKeyToAccount(
     ACCOUNT_PRIVATE_KEY);
-  console.log(
+  console.error(
     `
     Deploying Contract
     Contract: ${fileName}
@@ -58,12 +58,13 @@ dotenv.config({
     data: getSmartContractData(fileName)
   };
   const result = await sendSigned(txData, account.privateKey);
-  return console.log(`
+  console.error(`
     Success deploying contract ${fileName}
     Contract address: ${result.contractAddress}
 
     Add to contract address to .env file by running the following command:
-    $ echo CONTRACT_ADDRESS='${result.contractAddress} >> .env'
+    $ echo 'CONTRACT_ADDRESS=${result.contractAddress}' >> .env
   `);
+  console.log(`CONTRACT_ADDRESS='${result.contractAddress}'`)
 })() // websocket is not letting the process succeed, hence the exit(0)
 .then(() => process.exit(0)).catch(console.error);
