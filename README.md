@@ -19,6 +19,7 @@ Open .env in a text editor and set the following variables:
 
 ```
    ETHEREUM_NODE_URL=wss://rinkeby.infura.io/ws/v3/.....
+   ACCOUNT_PRIVATE_KEY=
    NODE_ENV=dev
    DB_HOST=localhost
    DB_NAME=ethereum_stats
