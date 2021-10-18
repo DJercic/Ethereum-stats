@@ -39,8 +39,8 @@ export async function* fetchUntil(
 }
 
 export function subscribe(
-  onData: (blockHeader?: Block) => undefined,
-  onError: (err: Error) => undefined
+  onData: (blockHeader?: Block) => void,
+  onError: (err: Error) => void
 ) {
   web3()
     .eth.subscribe('newBlockHeaders', async (err, blockHeader) => {
