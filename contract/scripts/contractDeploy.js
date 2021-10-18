@@ -35,8 +35,6 @@ dotenv.config({
   function getSmartContractData(fileName) {
     const bytecode = fs.readFileSync(
       `./contract/artifacts/${fileName}.bin`);
-    const abi = JSON.parse(fs.readFileSync(
-      `./contract/artifacts/${fileName}.abi`));
     return '0x' + bytecode
   }
 
