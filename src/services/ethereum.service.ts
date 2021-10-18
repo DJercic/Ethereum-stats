@@ -53,23 +53,25 @@ export function subscribe(
     .on('error', onError);
 }
 
-export async function depositStats(
+export async function storeStats(
   numberOfTransactions: number,
   sumOfGasFees: number,
   date: string
-) {
+): Promise<number> {
   /***
-   *
+   * Store stats on the blockchain and return the number of the block
+   * where the transaction was executed.
    */
   const Contract = web3().eth.Contract;
   const jsonInterface = await abi();
-  const contract = new Contract(jsonInterface);
-
+  const contract = new Contract(jsonInterface, need('CONTRACT_ADDRESS'));
   const response = await contract.methods
     .store(numberOfTransactions, sumOfGasFees, date)
-    .send();
-  console.log(response);
-  return response;
+    .send({
+      from: web3().eth.defaultAccount,
+      gasLimit: web3().utils.toHex('4900000'),
+    });
+  return response.number;
 }
 
 function initWeb3(): Web3 {
@@ -85,18 +87,25 @@ function initWeb3(): Web3 {
     })
   );
 
-  const account = web.eth.accounts.privateKeyToAccount(
-    need('ACCOUNT_PRIVATE_KEY')
-  );
-  web.eth.accounts.wallet.add(account);
-  web.eth.defaultAccount = account.address;
-  return web;
+  return setDefaultAccount(web);
 }
 
 async function loadAbi() {
   const fileName = 'contract_DailyStatsContract_sol_DailyStats';
   const abi = await fs.readFile(`./contract/artifacts/${fileName}.abi`);
   return JSON.parse(abi.toString('utf-8'));
+}
+
+function setDefaultAccount(web: Web3): Web3 {
+  /**
+   * Mutate the Web3 instance and set default values for account and sender
+   */
+  const account = web.eth.accounts.privateKeyToAccount(
+    need('ACCOUNT_PRIVATE_KEY')
+  );
+  web.eth.accounts.wallet.add(account);
+  web.eth.defaultAccount = account.address;
+  return web;
 }
 
 // Function that will ensure that initWeb3 is executed only once
