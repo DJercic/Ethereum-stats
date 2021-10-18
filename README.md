@@ -57,15 +57,15 @@ $ yarn start
 ### Prerequisites
 
 1. [node v14](https://nodejs.org/en/)
-
 2. [yarn](https://yarnpkg.com/)  
-   If you don't have yarn installed run:
+   If you don't have yarn installed run
 
 ```bash
 $ npm install --global yarn
 ```
 
-2. [docker](https://docs.docker.com/engine/install/#server) & [docker-compose](https://docs.docker.com/compose/install/)
+3. [docker](https://docs.docker.com/engine/install/#server)
+4. [docker-compose](https://docs.docker.com/compose/install/)
 
 ### External services
 
@@ -83,25 +83,28 @@ $ yarn install
 $ yarn start
 ```
 
-## Issues
+## Improvements
 
-### Smart contract storage
+### Smart contract
 
-Currently the contract is just appending Stats to a variable. How much "Stats" is possible to save on ethereum blockchain? What's the price?
+- Currently the contract is just appending Stats to a variable. How much "Stats" is possible to save on ethereum blockchain? What's the price?
 
-###
+- Gas optimizations, which I'm sure there is plenty
 
-## The Plan
+### Code optimizations
 
-1. Setup project, basic typescript. &check;
-2. MVP for reading form Ethereum blockchain &check;
-   1. Try connecting to the blockchain and read blocks/transactions &check;
-   2. Based on data structures and relation ships define which database will be used &check;
-   3. Setup a ethereum service as an abstraction for reading. &check;
-3. MVP for Smart Contract &check;
-   1. Develop & publish smart contract &check;
-4. Connect service to Smart Contract &check;
-5. Look for edge cases when reading from Ethereum blockchain
+- Error handling in general (always a problem with typescript), one case stands out and that is http connection timeout (or web socket timeouts in this case)
+- Stale/dead web socket connection to ethereum node (didn't see this one happen but I'm sure it can)
+
+### Tests
+
+- Update number of unit tests, especially for src/sync.ts
+- Local node to test run integrations test on the blockchain
+- E2E test which connects the database and the ethereum blockchain
+
+### Features
+
+- Currently if the process fails and restarts after X amount of days, the non synced stats will not be written to the ethereum blockchain. I would add another database entity Stats which would stand for all the daily stats already written to the blockchain.
 
 ### ToDo's
 
@@ -115,10 +118,23 @@ Define what small level tasks I want to accomplish
 - [x] Setup Block model
 - [x] Create a query to extract and sum all gas fees for that day.
 - [x] Write to Smart Contract to save Gas Spend on a given day
-- [ ] Catch errors while reading/writing from ethereum blockchain
+- [x] Catch errors while reading/writing from ethereum blockchain
 - [ ] Add retry logic to ethereum.service.fetchBlock()...
 - [ ] Setup github actions to automatically run tests
-- [ ] Setup hardhat for contract development
+- [ ] Setup hardhat for contract development (**I assume this is a must**)
 - [ ] Write synced timestamps to database to reduce calls gas when trying to resync
-- [ ] Check if websocket connection gets stale to ethereum node
+- [ ] Check if websocket connection to ethereum node gets stale
 - [ ] Setup local etherum network (geth | ganache cli)
+- [ ] Move contract to mappings instead of an array
+
+## The Plan (Original)
+
+1. Setup project, basic typescript. &check;
+2. MVP for reading form Ethereum blockchain &check;
+   1. Try connecting to the blockchain and read blocks/transactions &check;
+   2. Based on data structures and relation ships define which database will be used &check;
+   3. Setup a ethereum service as an abstraction for reading. &check;
+3. MVP for Smart Contract &check;
+   1. Develop & publish smart contract &check;
+4. Connect service to Smart Contract &check;
+5. Look for edge cases when reading from Ethereum blockchain
