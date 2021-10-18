@@ -1,5 +1,7 @@
 import moment from 'moment-timezone';
 
+moment.tz.setDefault('UTC');
+
 export type StartEnd = {
   start: number;
   end: number;
@@ -27,4 +29,8 @@ export function previousDay(): Date {
 
 export function previousDayTimestamps(): StartEnd {
   return dayTimestamps(previousDay());
+}
+
+export function toPreferredDateFormat(date: Date): string {
+  return moment(date).format('YYYY-MM-DD');
 }
