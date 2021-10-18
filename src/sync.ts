@@ -1,11 +1,12 @@
 import * as cron from 'node-cron';
 
 import * as ethService from './services/ethereum.service';
-import * as time from './type/time';
+import * as time from './utils/time';
 
 import { getCustomRepository } from 'typeorm';
 import { BlockRepository } from './repositories/blockRepository';
 import log from './services/logging.service';
+import { Block } from './dtos/block';
 
 async function syncBlockDatabase() {
   /**
@@ -28,7 +29,10 @@ async function syncBlockDatabase() {
   }
 }
 
-async function onNewBlock(block) {
+async function onNewBlockHandler(block: Block) {
+  /**
+   * Handler when a new block
+   */
   if (!block) {
     // This case popped up while listening to Ethereum blockchain,
     // although the typings suggest that an empty block is not possible.
@@ -66,10 +70,12 @@ async function storeYesterdaysStatsToContract() {
 
 export async function run(cronSchedule: string) {
   /**
-   *
+   * Run sync with Database and Ethereum blockchain.
+   * Sync will listen for new blocks and sync them as they
+   * appear on the blockchain.
    */
   log.info('Subscribe to blockchain updates');
-  ethService.subscribe(onNewBlock, onNewBlockError);
+  ethService.subscribe(onNewBlockHandler, onNewBlockError);
 
   log.info('Syncing until last timestamp');
   await syncBlockDatabase();

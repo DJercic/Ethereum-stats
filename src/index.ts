@@ -5,5 +5,6 @@ import * as sync from './sync';
 (async function main() {
   autoload({ path: '.env' });
   await dbService.setup();
-  sync.run(read('CRON_SCHEDULE', '1 0 * * *'));
+  const cronSchedule = read('CRON_SCHEDULE', '1 0 * * *');
+  sync.run(cronSchedule);
 })();
