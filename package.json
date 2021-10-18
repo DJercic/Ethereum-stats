@@ -49,6 +49,7 @@
     "@types/node-cron": "^3.0.0",
     "@types/ramda": "^0.27.45",
     "dotenv": "^10.0.0",
+    "ethereumjs-tx": "^2.1.2",
     "moment-timezone": "^0.5.33",
     "node-cron": "^3.0.0",
     "pg": "^8.7.1",
