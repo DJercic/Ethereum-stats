@@ -4,17 +4,24 @@ import { getCustomRepository } from 'typeorm';
 import { autoload } from './config';
 import { BlockRepository } from './repositories/blockRepository';
 import * as dbService from './services/db.service';
-import { fetchUntil, subscribe } from './services/ethereum.service';
+import * as ethService from './services/ethereum.service';
 import log from './services/logging.service';
 import * as time from './type/time';
 
-async function syncUntilLastDatabaseEntry() {
+async function syncBlockDatabase() {
   const blockRepo = getCustomRepository(BlockRepository);
 
+  const { end } = time.previousDayTimestamps();
   const latestBlock = await blockRepo.findLatest();
-  const iterateBlocks = fetchUntil(
-    (block) => block.number === latestBlock.number
-  );
+  /**
+   * If the database is empty fetch block for today.
+   * If there is something in the db fetch until last entry.
+   */
+  const condition = latestBlock
+    ? (block) => block.number === latestBlock.number
+    : (block) => block.timestamp <= end;
+
+  const iterateBlocks = ethService.fetchUntil(condition);
   for await (const block of iterateBlocks) {
     log.info(`Fetched block ${block.number}`);
     await blockRepo.save(block);
@@ -44,15 +51,10 @@ async function onNewBlockError(err: Error) {
 }
 
 async function writeStatsToContract() {
-  const {start, end} = time.previousDayTimestamps();
-  console.log(start, end);
+  const { start, end } = time.previousDayTimestamps();
   const blockRepo = getCustomRepository(BlockRepository);
-  const allBetween = await blockRepo.calculateStatsBetween(
-    1634342400,
-    1634381907
-  );
-  console.log('Bigger');
-  console.log(allBetween);
+  const stats = await blockRepo.calculateStatsBetween(start, end);
+  await ethService.depositStats(stats.count, stats.sum, '2021-10-18');
 }
 
 async function main() {
@@ -60,10 +62,12 @@ async function main() {
   await dbService.setup();
 
   log.info('Starting ethereum stats service');
-  subscribe(onNewBlock, onNewBlockError);
+  // Subscribe on live blocks from Ethereum network
+  ethService.subscribe(onNewBlock, onNewBlockError);
 
   log.info('Syncing until last timestamp');
-  await syncUntilLastDatabaseEntry();
+
+  await syncBlockDatabase();
   cron.schedule('* * * * *', writeStatsToContract, { timezone: 'UTC' });
 }
 
