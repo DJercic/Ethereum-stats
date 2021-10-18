@@ -102,3 +102,5 @@ Define what small level tasks I want to accomplish
 - [] Setup github actions to automatically run tests
 - [] Setup hardhat for contract development
 - [] Write synced timestamps to database to reduce calls gas when trying to resync
+- [] Check if websocket connection gets stale to ethereum node
+- [] Setup local etherum network (geth | ganache cli)
