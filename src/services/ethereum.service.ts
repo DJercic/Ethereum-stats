@@ -10,7 +10,8 @@ export async function fetchBlock(
   blockHashOrBlockNumber: number | string
 ): Promise<Block> {
   /**
-   * Create to avoid writing conversion to Block every time
+   * Fetch Block by hash or unique number. More of a wrapper to avoid writing conversion
+   * to Block dto every time.
    */
   const block = (await web3().eth.getBlock(blockHashOrBlockNumber)) as unknown;
   return block as Block;
@@ -42,6 +43,9 @@ export function subscribe(
   onData: (blockHeader?: Block) => void,
   onError: (err: Error) => void
 ) {
+  /**
+   * Subscribe on block header creation. Invoke handlers each time a block is created on the blockchain
+   */
   web3()
     .eth.subscribe('newBlockHeaders', async (err, blockHeader) => {
       if (err) {
