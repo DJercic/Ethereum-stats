@@ -92,12 +92,13 @@ Define what small level tasks I want to accomplish
 - [x] Setup postgres as docker service
 - [x] Setup typeorm and connect to postgres
 - [x] Setup testing
-- [] Setup integration testing
+- [x] Setup integration testing
 - [] check if date is in format in smart contract "YYYY-mm-dd"
 - [x] Setup Block model
-- [] Create a query to extract and sum all gas fees for that day.
-- [] Write to Smart Contract to save Gas Spend on a given day
+- [x] Create a query to extract and sum all gas fees for that day.
+- [x] Write to Smart Contract to save Gas Spend on a given day
 - [] Catch errors while reading/writing from ethereum blockchain
 - [] Add retry logic to ethereum.service.fetchBlock()...
 - [] Setup github actions to automatically run tests
 - [] Setup hardhat for contract development
+- [] Write synced timestamps to database to reduce calls gas when trying to resync
