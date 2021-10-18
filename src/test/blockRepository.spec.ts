@@ -4,6 +4,7 @@ import path from 'path';
 import test from 'ava';
 import { getCustomRepository } from 'typeorm';
 
+import { BlockEntity } from '../entities/BlockEntity';
 import { BlockRepository } from '../repositories/blockRepository';
 
 import * as config from './../config';
@@ -11,7 +12,7 @@ import * as dbService from './../services/db.service';
 
 const BLOCKS_LENGTH = 10000;
 
-async function loadSeedBlocks(): Promise<Array<Record<any, any>>> {
+async function loadSeedBlocks(): Promise<Array<Record<string, BlockEntity>>> {
   /***
    * Seed data contains all actual transactions on ethereum blockchain
    * that happened between October 9th 11:49 and October 11th 1:45 PM
@@ -45,7 +46,7 @@ async function cleanUp() {
   await dbService.truncateAllEntities();
 }
 
-test.beforeEach(async (_t) => {
+test.beforeEach(async () => {
   config.autoload({ path: '.env.test', override: true });
   await dbService.setup();
 });
@@ -108,13 +109,15 @@ test('writing duplicate block number', async (t) => {
   t.assert(!(await blockRepo.upsert(block)));
 });
 
-
 test.only('finding all blocks between Oct 10 00:00 - 10 11:59:59 and sum up their gas fees and count them', async (t) => {
   const OCT_10_FIRST_TIMESTAMP = 1633824000;
   const OCT_10_LAST_TIMESTAMP = 1633910400;
   await insertSeedBlocks();
   const blockRepo = getCustomRepository(BlockRepository);
-  const stats = await blockRepo.calculateStatsBetween(OCT_10_FIRST_TIMESTAMP, OCT_10_LAST_TIMESTAMP);
+  const stats = await blockRepo.calculateStatsBetween(
+    OCT_10_FIRST_TIMESTAMP,
+    OCT_10_LAST_TIMESTAMP
+  );
   t.assert(stats.sum == 98475597666);
   t.assert(stats.count == 6375);
 });

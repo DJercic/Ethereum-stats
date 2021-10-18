@@ -3,7 +3,7 @@ import test from 'ava';
 import * as config from './../config';
 import * as dbService from './../services/db.service';
 
-test.beforeEach((_t) => {
+test.beforeEach(() => {
   config.autoload({ path: '.env.test' });
 });
 

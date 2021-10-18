@@ -23,13 +23,13 @@ export class BlockRepository extends Repository<BlockEntity> {
       .andWhere('block.timestamp < :end', { end })
       .getMany();
   }
-  
+
   calculateStatsBetween(start: number, end: number) {
     return this.createQueryBuilder('block')
-    .select(['COUNT(DISTINCT block.number)', 'SUM(block.gasUsed)'])
-    .where('block.timestamp > :start', { start })
-    .andWhere('block.timestamp < :end', { end })
-    .getRawOne();
+      .select(['COUNT(DISTINCT block.number)', 'SUM(block.gasUsed)'])
+      .where('block.timestamp > :start', { start })
+      .andWhere('block.timestamp < :end', { end })
+      .getRawOne();
   }
 
   async upsert<T extends DeepPartial<BlockEntity>>(block: T) {

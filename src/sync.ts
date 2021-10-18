@@ -1,12 +1,11 @@
 import * as cron from 'node-cron';
-
-import * as ethService from './services/ethereum.service';
-import * as time from './utils/time';
-
 import { getCustomRepository } from 'typeorm';
-import { BlockRepository } from './repositories/blockRepository';
-import log from './services/logging.service';
+
 import { Block } from './dtos/block';
+import { BlockRepository } from './repositories/blockRepository';
+import * as ethService from './services/ethereum.service';
+import log from './services/logging.service';
+import * as time from './utils/time';
 
 async function syncBlockDatabase() {
   /**
